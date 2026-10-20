@@ -1,0 +1,18 @@
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+HTTP Request: GET https://restcountries.com/v3.1/name/germany?fields=name%2Ccapital%2Cregion%2Cpopulation "HTTP/1.1 301 Moved Permanently"
+HTTP Request: GET https://files-03.restcountries.com/countries.00/legacy.json?fields=name%2Ccapital%2Cregion%2Cpopulation "HTTP/1.1 200 OK"
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+HTTP Request: GET https://restcountries.com/v3.1/name/united%20states?fullText=true&fields=name%2Ccapital%2Cregion%2Csubregion%2Cpopulation%2Ccurrencies%2Clanguages%2Cborders%2Cflags%2Ccca3 "HTTP/1.1 301 Moved Permanently"
+HTTP Request: GET https://files-03.restcountries.com/countries.00/legacy.json?fullText=true&fields=name%2Ccapital%2Cregion%2Csubregion%2Cpopulation%2Ccurrencies%2Clanguages%2Cborders%2Cflags%2Ccca3 "HTTP/1.1 200 OK"
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+HTTP Request: GET https://restcountries.com/v3.1/name/atlantis?fullText=true&fields=name%2Ccapital%2Cregion%2Csubregion%2Cpopulation%2Ccurrencies%2Clanguages%2Cborders%2Cflags%2Ccca3 "HTTP/1.1 301 Moved Permanently"
+HTTP Request: GET https://files-03.restcountries.com/countries.00/legacy.json?fullText=true&fields=name%2Ccapital%2Cregion%2Csubregion%2Cpopulation%2Ccurrencies%2Clanguages%2Cborders%2Cflags%2Ccca3 "HTTP/1.1 200 OK"
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type ListToolsRequest
