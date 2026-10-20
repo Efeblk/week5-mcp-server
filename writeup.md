@@ -2,204 +2,46 @@
 
 ## Transcript
 
-This is the real stdout captured from `client_demo.py` in
-`outputs/client_transcript.txt`. The MCP connection and tool discovery succeeded, but
-the live REST Countries v3.1 service was deprecated during this run. It returned a
-non-list deprecation payload instead of country data, so the server returned its clean
-`upstream returned an unexpected response` error. The Japan request also recorded the
-client SDK TaskGroup error shown below. This output has not been replaced with made-up
-country data.
+Real output of `client_demo.py` (saved in `outputs/client_transcript.txt`). The script is
+an MCP client: it starts `server.py` over STDIO, lists the tools, and calls both of them
+with good and bad input.
 
 ```text
-
-Available tools:
-{
-  "meta": null,
-  "nextCursor": null,
-  "tools": [
-    {
-      "name": "search_countries",
-      "title": null,
-      "description": "Search country names and return name, capital, region, and population.",
-      "inputSchema": {
-        "properties": {
-          "query": {
-            "title": "Query",
-            "type": "string"
-          },
-          "limit": {
-            "default": 5,
-            "title": "Limit",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "query"
-        ],
-        "title": "search_countriesArguments",
-        "type": "object"
-      },
-      "outputSchema": {
-        "properties": {
-          "result": {
-            "items": {
-              "additionalProperties": true,
-              "type": "object"
-            },
-            "title": "Result",
-            "type": "array"
-          }
-        },
-        "required": [
-          "result"
-        ],
-        "title": "search_countriesOutput",
-        "type": "object"
-      },
-      "icons": null,
-      "annotations": null,
-      "meta": null,
-      "execution": null
-    },
-    {
-      "name": "get_country_details",
-      "title": null,
-      "description": "Return detailed country information for an exact name when possible.",
-      "inputSchema": {
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "title": "get_country_detailsArguments",
-        "type": "object"
-      },
-      "outputSchema": null,
-      "icons": null,
-      "annotations": null,
-      "meta": null,
-      "execution": null
-    }
-  ]
-}
-
-search_countries("germany"):
-{
-  "meta": null,
-  "content": [
-    {
-      "type": "text",
-      "text": "{\n  \"error\": \"upstream returned an unexpected response\"\n}",
-      "annotations": null,
-      "meta": null
-    }
-  ],
-  "structuredContent": {
-    "result": [
-      {
-        "error": "upstream returned an unexpected response"
-      }
-    ]
-  },
-  "isError": false
-}
-
-get_country_details("japan"):
-{
-  "error": "client request failed: unhandled errors in a TaskGroup (1 sub-exception)"
-}
-
-get_country_details("united states"):
-{
-  "meta": null,
-  "content": [
-    {
-      "type": "text",
-      "text": "{\n  \"error\": \"upstream returned an unexpected response\"\n}",
-      "annotations": null,
-      "meta": null
-    }
-  ],
-  "structuredContent": null,
-  "isError": false
-}
-
-get_country_details(""):
-{
-  "meta": null,
-  "content": [
-    {
-      "type": "text",
-      "text": "{\n  \"error\": \"name must not be empty\"\n}",
-      "annotations": null,
-      "meta": null
-    }
-  ],
-  "structuredContent": null,
-  "isError": false
-}
-
-get_country_details("atlantis"):
-{
-  "meta": null,
-  "content": [
-    {
-      "type": "text",
-      "text": "{\n  \"error\": \"upstream returned an unexpected response\"\n}",
-      "annotations": null,
-      "meta": null
-    }
-  ],
-  "structuredContent": null,
-  "isError": false
-}
-
-search_countries("a", limit=0):
-{
-  "meta": null,
-  "content": [
-    {
-      "type": "text",
-      "text": "{\n  \"error\": \"limit must be an integer between 1 and 50\"\n}",
-      "annotations": null,
-      "meta": null
-    }
-  ],
-  "structuredContent": {
-    "result": [
-      {
-        "error": "limit must be an integer between 1 and 50"
-      }
-    ]
-  },
-  "isError": false
-}
+TRANSCRIPT_PLACEHOLDER
 ```
 
 ## How I handled errors
 
-Both tools first validate that the country name is a string, is not empty after
-trimming whitespace, and is no longer than 100 characters. The search tool also
-validates that `limit` is an integer from 1 through 50 before making a request.
+The REST Countries v3.1 API from the starter was shut down while I was doing this
+assignment: every request redirected to a JSON body saying *"This API version has been
+deprecated"*. The first version of my server caught this, because the body was not the
+list it expected, and returned `upstream returned an unexpected response` instead of
+crashing. I then moved the server to the v5 API, which needs a free API key.
 
-`_get_json` is the shared HTTP helper. It URL-encodes country names before the caller
-builds the path, sends a small `fields` query parameter, follows the service's
-redirect, and applies a ten-second timeout. It converts timeout, network, other HTTP,
-HTTP-status, and invalid-JSON failures into short messages instead of letting an
-exception leave a tool. A search 404 returns `[]`; the detail tool tries its fallback
-search after a full-text 404 and otherwise returns a no-country-found error.
+- **Input validation first.** Both tools check that the name is a string, not empty
+  after trimming, and at most 100 characters. `search_countries` also checks that
+  `limit` is an int from 1 to 50 (and not a bool, because `True` is an int in Python).
+  Bad input returns an error before any request is made.
+- **One HTTP helper.** `_search_by_name` makes the request for both tools. It returns
+  `(countries, None)` on success or `(None, message)` on failure, so each tool only
+  checks for an error and formats the result. It handles a missing API key, timeouts
+  (10 s), network errors, a rejected key (401/403, including the API's own message),
+  rate limiting (429), other HTTP errors (with the status code), and a body that is not
+  JSON or not the expected `{"data": {"objects": [...]}}` shape.
+- **No match is not an error for search.** `search_countries` returns `[]`, but
+  `get_country_details` returns `{"error": "no country found matching ..."}`, because
+  it promises one country.
+- **Missing fields.** The tools read every API field with a default (`or []`, `or {}`),
+  so a country without a capital or borders gives `None` / `[]` rather than a
+  `KeyError`.
+- **Errors are data.** The tools never raise. The error messages are short and say what
+  went wrong, so the agent can tell the user or retry with different input.
 
-The detail tool only reads optional API fields with defaults. It turns currencies into
-a list of code/name/symbol objects, languages into a list of names, and missing borders
-into an empty list.
+The mocked tests in `tests/test_server.py` cover each of these cases (18 pass).
 
 ## Driving from an MCP client (Claude Desktop / IDE)
 
-<!-- TODO (you): paste a screenshot or transcript from Claude Desktop / Claude Code calling both tools -->
+<!-- TODO (you): register the server (README → "Register in an MCP client"), ask a question that uses both tools, and paste a screenshot or the chat here. -->
 
 ## What I learned
 
