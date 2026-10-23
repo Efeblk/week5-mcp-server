@@ -7,7 +7,103 @@ an MCP client: it starts `server.py` over STDIO, lists the tools, and calls both
 with good and bad input.
 
 ```text
-TRANSCRIPT_PLACEHOLDER
+Available tools:
+  - search_countries(query, limit)
+  - get_country_details(name)
+
+>>> search_countries(query='germany')
+{
+  "name": "Germany",
+  "capital": "Berlin",
+  "region": "Europe",
+  "population": 83298787
+}
+
+>>> search_countries(query='guinea', limit=3)
+{
+  "name": "Equatorial Guinea",
+  "capital": "Malabo",
+  "region": "Africa",
+  "population": 1795834
+}
+{
+  "name": "Guinea",
+  "capital": "Conakry",
+  "region": "Africa",
+  "population": 17521167
+}
+{
+  "name": "Guinea-Bissau",
+  "capital": "Bissau",
+  "region": "Africa",
+  "population": 1890252
+}
+
+>>> get_country_details(name='japan')
+{
+  "name": {
+    "common": "Japan",
+    "official": "Japan"
+  },
+  "capital": "Tokyo",
+  "region": "Asia",
+  "subregion": "Eastern Asia",
+  "population": 122650000,
+  "currencies": [
+    {
+      "code": "JPY",
+      "name": "Japanese yen",
+      "symbol": "¥"
+    }
+  ],
+  "languages": [
+    "Japanese"
+  ],
+  "borders": [],
+  "flag_url": "https://flags.restcountries.com/v5/w640/jp.png"
+}
+
+>>> get_country_details(name='united states')
+{
+  "name": {
+    "common": "United States",
+    "official": "United States of America"
+  },
+  "capital": "Washington, D.C.",
+  "region": "Americas",
+  "subregion": "North America",
+  "population": 341784857,
+  "currencies": [
+    {
+      "code": "USD",
+      "name": "United States dollar",
+      "symbol": "$"
+    }
+  ],
+  "languages": [
+    "English"
+  ],
+  "borders": [
+    "CAN",
+    "MEX"
+  ],
+  "flag_url": "https://flags.restcountries.com/v5/w640/us.png"
+}
+
+>>> get_country_details(name='')
+{
+  "error": "name must not be empty"
+}
+
+>>> get_country_details(name='atlantis')
+{
+  "error": "no country found matching 'atlantis'"
+}
+
+>>> search_countries(query='a', limit=0)
+{
+  "error": "limit must be an integer between 1 and 50"
+}
 ```
 
 ## How I handled errors

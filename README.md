@@ -1,7 +1,7 @@
 # Data Explorer MCP Server
 
 Data Explorer is a small STDIO MCP server that gives an MCP client two tools backed
-by the [REST Countries](https://restcountries.com) API. It is the Week 4 custom MCP
+by the [REST Countries](https://restcountries.com) API. It is the Week 5 custom MCP
 server assignment.
 
 > **API note:** the course starter used REST Countries v3.1, which needed no key. That
@@ -91,7 +91,7 @@ nothing matched.
 
 ```text
 search_countries(query="germany")
-→ [{"name": "Germany", "capital": "Berlin", "region": "Europe", "population": 83491249}]
+→ [{"name": "Germany", "capital": "Berlin", "region": "Europe", "population": 83298787}]
 ```
 
 ### `get_country_details(name)`
@@ -111,7 +111,7 @@ Returns `dict` with `name` (`common`, `official`), `capital`, `region`, `subregi
 ```text
 get_country_details(name="japan")
 → {"name": {"common": "Japan", "official": "Japan"}, "capital": "Tokyo",
-   "region": "Asia", "subregion": "Eastern Asia", "population": 123210000,
+   "region": "Asia", "subregion": "Eastern Asia", "population": 122650000,
    "currencies": [{"code": "JPY", "name": "Japanese yen", "symbol": "¥"}],
    "languages": ["Japanese"], "borders": [],
    "flag_url": "https://flags.restcountries.com/v5/w640/jp.png"}

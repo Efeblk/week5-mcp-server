@@ -1,4 +1,4 @@
-# Week 4 — Build a Custom MCP Server: The Data Explorer
+# Week 5 — Build a Custom MCP Server: The Data Explorer
 
 **Estimated time: ~3 hours.**
 

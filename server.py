@@ -1,4 +1,4 @@
-"""Data Explorer MCP server for Week 4.
+"""Data Explorer MCP server for Week 5.
 
 The server wraps the REST Countries API and exposes two small, model-friendly tools
 over STDIO. Start it with ``python server.py`` after installing requirements.
