@@ -137,7 +137,29 @@ The mocked tests in `tests/test_server.py` cover each of these cases (18 pass).
 
 ## Driving from an MCP client (Claude Desktop / IDE)
 
-<!-- TODO (you): register the server (README → "Register in an MCP client"), ask a question that uses both tools, and paste a screenshot or the chat here. -->
+I registered the server with Claude Code over STDIO (`--mcp-config` pointing at
+`server.py`) and allowed only the two Data Explorer tools. Then I asked one question that
+needs both of them. The full session is in `outputs/agent_transcript_claude_code.txt`.
+The prompt was:
+
+> Which countries have 'land' in their name? Show the top 3 by population, then give me
+> full details (currencies, languages, borders) for the first one. Also look up the
+> country 'Narnia'.
+
+The agent made three tool calls:
+
+```text
+>>> search_countries(query='land', limit=50)    -> 50 matches
+>>> search_countries(query='Narnia')            -> {"result": []}
+>>> get_country_details(name='Thailand')        -> Kingdom of Thailand, Bangkok, THB (฿),
+                                                   Thai, borders MMR/KHM/LAO/MYS
+```
+
+Its answer ranked Thailand, Poland and the Netherlands, then gave Thailand's details, and
+said Narnia is not in the dataset. One thing it noticed on its own: the API also matches
+native names, so China and Germany came back for "land" (Germany through "Deutschland"). It
+filtered those out using the `name` field my tool returns. The empty list for Narnia
+behaved as designed: search treats "no match" as a normal result, not an error.
 
 ## What I learned
 

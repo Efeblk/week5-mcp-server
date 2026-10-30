@@ -1,0 +1,126 @@
+Client: Claude Code (claude -p, model sonnet), server registered with --mcp-config over STDIO.
+Only the two data-explorer tools were allowed (--allowedTools).
+
+USER: Which countries have 'land' in their name? Show the top 3 by population, then give me full details (currencies, languages, borders) for the first one. Also look up the country 'Narnia'.
+
+MCP servers: [{"name": "data-explorer", "status": "connected", "source": "dynamic"}]
+
+>>> CALL mcp__data-explorer__search_countries {"query": "land", "limit": 50}
+>>> CALL mcp__data-explorer__search_countries {"query": "Narnia"}
+<<< RESULT
+{
+  "result": [
+    {
+      "name": "Bermuda",
+      "capital": "Hamilton",
+      "region": "Americas",
+      "population": 64055
+    },
+    {
+      "name": "Bouvet Island",
+      "capital": null,
+      "region": "Antarctic",
+      "population": 0
+    },
+    {
+      "name": "British Indian Ocean Territory",
+      "capital": "Diego Garcia",
+      "region": "Africa",
+      "population": 2000
+    },
+    {
+      "name": "British Virgin Islands",
+      "capital": "Road Town",
+      "region": "Americas",
+      "population": 38984
+    },
+    {
+      "name": "Caribbean Netherlands",
+      "capital": "Kralendijk",
+      "region": "Americas",
+      "population": 31980
+    },
+    {
+      "name": "Cayman Islands",
+      "capital": "George Town",
+      "region": "Americas",
+      "population": 90577
+    },
+    {
+      "name": "China",
+      "capital": "Beijing",
+      "region": "Asia",
+      "population": 1404890000
+    },
+    {
+      "name": "Christmas Island",
+      "capital": "Flying Fish Cove",
+      "region": "Oceania",
+      "population": 1692
+    },
+    "... 36 more rows trimmed for the writeup ..."
+  ]
+}
+
+<<< RESULT
+{
+  "result": []
+}
+
+>>> CALL mcp__data-explorer__get_country_details {"name": "Thailand"}
+<<< RESULT
+{
+  "name": {
+    "common": "Thailand",
+    "official": "Kingdom of Thailand"
+  },
+  "capital": "Bangkok",
+  "region": "Asia",
+  "subregion": "South-Eastern Asia",
+  "population": 70250751,
+  "currencies": [
+    {
+      "code": "THB",
+      "name": "Thai baht",
+      "symbol": "฿"
+    }
+  ],
+  "languages": [
+    "Thai"
+  ],
+  "borders": [
+    "MMR",
+    "KHM",
+    "LAO",
+    "MYS"
+  ],
+  "flag_url": "https://flags.restcountries.com/v5/w640/th.png"
+}
+
+ASSISTANT:
+## Countries with "land" in their name: top 3 by population
+
+The search matches several non-English names too. China and Germany came back because of native-language names such as "Deutschland". I kept only countries whose English name contains "land".
+
+| Rank | Country | Population |
+|---|---|---|
+| 1 | Thailand | 70,250,751 |
+| 2 | Poland | 37,232,000 |
+| 3 | Netherlands | 18,171,612 |
+
+Switzerland (9.15M), Finland, Ireland and New Zealand follow. The Solomon Islands and other "…Islands" territories also match, but they are much smaller.
+
+## Thailand: full details
+
+- **Official name:** Kingdom of Thailand
+- **Capital:** Bangkok
+- **Region:** South-Eastern Asia (Asia)
+- **Currency:** Thai baht (THB, ฿)
+- **Languages:** Thai
+- **Borders:** Myanmar (MMR), Cambodia (KHM), Laos (LAO) and Malaysia (MYS)
+- **Flag:** https://flags.restcountries.com/v5/w640/th.png
+
+## Narnia
+
+No country named "Narnia" exists in the dataset. The search returned an empty list, which is expected because Narnia is a fictional land from C.S. Lewis's books.
+
