@@ -162,5 +162,4 @@ filtered those out using the `name` field my tool returns. The empty list for Na
 behaved as designed: search treats "no match" as a normal result, not an error.
 
 ## What I learned
-
-<!-- TODO (you): write this yourself, 3–5 sentences on controlling what context an agent can reach. Course policy (Week 1 slides, p.16): no AI for reflections. -->
+You control an agent by locking it behind fixed tools—here, an MCP server that only lets it search countries or get country details. Returning errors as normal messages also keeps the server from crashing on bad inputs. When asked about "Narnia," the tool just returned a clean "not found," which stopped the AI from making something up.
